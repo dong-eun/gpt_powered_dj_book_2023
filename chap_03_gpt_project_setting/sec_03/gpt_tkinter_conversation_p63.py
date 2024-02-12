@@ -1,21 +1,31 @@
 import openai
 import tkinter as tk
 from tkinter import scrolledtext
+from dotenv import load_dotenv
+import os
 
-# openai.api_key = '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'
-from api_keys import openai_api_key # API key가 github에 올라가면 폐기되기 때문에 따로 import 했습니다.
-openai.api_key=openai_api_key  # API key가 github에 올라가면 폐기되기 때문에 따로 import 했습니다.
+load_dotenv()
 
+openai.api_key = os.getenv("apiKey")
+
+# 대화 로그를 OpenAI API에 전송하고 응답을 받아오는 함수입니다.
 def send_message(message_log):
-    response=openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=message_log,
-        temperature=0.5,
+    # OpenAI의 ChatCompletion API를 사용하여 메시지를 생성합니다.
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",  # 사용할 모델을 지정합니다.
+        messages=message_log,    # 대화 로그를 API에 전달합니다.
+        temperature=0.5,         # 생성된 텍스트의 다양성을 조절하는 매개변수입니다.
     )
+
+    # API 응답에서 생성된 선택지들을 반복합니다.
     for choice in response.choices:
+        # 선택지에 "text"가 있으면 해당 텍스트를 반환합니다.
         if "text" in choice:
             return choice.text
+
+    # 선택지에 "text"가 없는 경우, 첫 번째 선택지의 메시지 내용을 반환합니다.
     return response.choices[0].message.content
+
 
 def main():
     message_log=[

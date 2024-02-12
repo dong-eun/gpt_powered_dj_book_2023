@@ -1,8 +1,10 @@
 import openai
+from dotenv import load_dotenv
+import os
 
-# openai.api_key = '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'
-from api_keys import openai_api_key # API key가 github에 올라가면 폐기되기 때문에 따로 import 했습니다.
-openai.api_key=openai_api_key  # API key가 github에 올라가면 폐기되기 때문에 따로 import 했습니다.
+load_dotenv()
+
+openai.api_key=os.getenv("apiKey")  # API key가 github에 올라가면 폐기되기 때문에 따로 import 했습니다.
 
 # OpenAI 챗봇 모델에 메시지를 보내고 응답을 반환하는 함수
 def send_message(message_log):
